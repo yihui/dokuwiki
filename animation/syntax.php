@@ -37,9 +37,11 @@ class syntax_plugin_animation extends DokuWiki_Syntax_Plugin {
       $source = trim(substr($match, 4, -1));
       list($para,$opts) = preg_split('/\|/u',$source,2);
       if (strpos($opts, "': ") === false) $opts = '';
-      list($id, $url, $type, $max, $height, $interval) = preg_split('/\s+/u', trim($para), 8);
-      list($id, $url, $type, $max, $width, $height, $interval, $autoplay) = preg_split('/\s+/u', trim($para), 8);
-      list($id, $url, $type, $max, $interval, $autoplay, $extra1, $extra2) = preg_split('/\s+/u', trim($para), 8);
+      // 1st version:
+      // list($id, $url, $type, $max, $height, $interval) = preg_split('/\s+/u', trim($para), 8);
+      // 2nd version:
+      // list($id, $url, $type, $max, $width, $height, $interval, $autoplay) = preg_split('/\s+/u', trim($para), 8);
+      list($id, $url, $type, $max, $interval, $autoplay, $navigator, $width) = preg_split('/\s+/u', trim($para), 8);
       if (floatval($interval) > 100 & floatval($autoplay) > 0) {
 	if (floatval($autoplay) < 10) {
 	  // you are using the 1st version
@@ -47,22 +49,24 @@ class syntax_plugin_animation extends DokuWiki_Syntax_Plugin {
 	  $autoplay = '';
 	} else {
 	  // you are using the 2nd version
-	  $interval = $extra1;
-	  $autoplay = $extra2;
+	  $interval = $navigator;
+	  $autoplay = $width;
 	}
       }
-      return array($state, array($id, $url, $type, $max, $interval, $autoplay, $opts));
+      return array($state, array($id, $url, $type, $max, $interval, $autoplay, $navigator, $width, $opts));
     }
     function render($mode, &$renderer, $data) {
       if($mode == 'xhtml'){
 	list($state, $match) = $data;
-	list($id, $url, $type, $max, $interval, $autoplay, $opts) = $match;
+	list($id, $url, $type, $max, $interval, $autoplay, $navigator, $width, $opts) = $match;
 	$id = 'animation_' . str_replace(array("!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", ".", "/", ":", ";", "?", "@", "[", "]", "^", "`", "{", "|", "}", "~"), "_", $id);
 	if ($autoplay == 'autoplay') {
 	  $autoplay = "$('#$id').scianimator('play');";
 	} else {
 	  $autoplay = '';
 	}
+	if ($navigator != 'true') $opts = "'controls': ['first', 'previous', 'play', 'next', 'last', 'loop', 'speed'], " . $opts;
+	if (floatval($width) > 0) $opts = "'width': $width, " . $opts;
 	$imglist = '';
 	for ($imgnum = 1; $imgnum <= intval($max); $imgnum++) {
 	  $imglist .= "'" . $url . $imgnum . '.' . $type . "', ";
