@@ -66,10 +66,7 @@ class action_plugin_animation extends DokuWiki_Action_Plugin {
         }
 
         // Add JS
-        $brushes = array(
-        "shCore.js","shAutoloader.js","shBrushR.js",
-                        "jquery-1.4.4.min.js","jquery.scianimator.min.js" 
-                                   );
+        $brushes = array("shCore.js","shAutoloader.js","shBrushR.js", "jquery.scianimator.min.js");
 
         // Register all brushes.
         foreach ($brushes as $brush) {
