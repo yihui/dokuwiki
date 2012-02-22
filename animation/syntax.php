@@ -20,7 +20,7 @@ class syntax_plugin_animation extends DokuWiki_Syntax_Plugin {
       return array(
 		   'author' => 'Yihui Xie',
 		   'email'  => 'xie@yihui.name',
-		   'date'   => '2012-02-16',
+		   'date'   => '2012-02-22',
 		   'name'   => 'Animation Plugin',
 		   'desc'   => 'Generate an animation from a sequence of images, e.g. 1.png, 2.png, ...',
 		   'url'    => 'https://github.com/yihui/dokuwiki',
