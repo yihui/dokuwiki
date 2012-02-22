@@ -67,9 +67,11 @@ class syntax_plugin_animation extends DokuWiki_Syntax_Plugin {
 	}
 	if ($navigator != 'true') $opts = "'controls': ['first', 'previous', 'play', 'next', 'last', 'loop', 'speed'], " . $opts;
 	if (floatval($width) > 0) $opts = "'width': $width, " . $opts;
+	// if you have your format, just use yours, otherwise use the default %d
+	if (preg_match("/%[0-9]+d$/", $url) == 0) $url .= "%d";
 	$imglist = '';
 	for ($imgnum = 1; $imgnum <= intval($max); $imgnum++) {
-	  $imglist .= "'" . $url . $imgnum . '.' . $type . "', ";
+		$imglist .= "'" . sprintf($url, $imgnum) . '.' . $type . "', ";
 	}
 	$renderer->doc .=
 
